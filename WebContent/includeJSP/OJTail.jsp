@@ -7,7 +7,7 @@
     %>
     
 
-<div class="center" style="margin-top: 20px;"><label>SZUCPC Online Judge @ 2017 by hwf</label><br>
+<div class="center" style="margin-top: 20px;"><label>JXNU Online Judge @ 2019 by Tern</label><br>
 	<label>Server Time:</label>
 	<span id="nowdate"></span><br>
 </div>

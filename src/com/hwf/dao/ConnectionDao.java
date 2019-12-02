@@ -45,8 +45,9 @@ public class ConnectionDao {
 		list = document.getElementsByTagName("dbPasswd");
 		String dbPasswd = ((Element) list.item(0)).getAttribute("value");
 
-		// System.out.println(ConfigListener.getDatabaseInfoXmlPath() + "----");
-
+//		 System.out.println(ConfigListener.getDatabaseInfoXmlPath() + "----");
+//		 System.out.println(dbUrl+dbUser+dbPasswd + "----");
+		
 		Class.forName(driverClassName);
 		conn = DriverManager.getConnection(dbUrl, dbUser, dbPasswd);
 	}

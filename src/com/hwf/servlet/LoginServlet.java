@@ -226,6 +226,8 @@ public class LoginServlet extends HttpServlet {
 				String sId = session.getId();
 
 				String sql = "Select isPasswdAccept(?,?);";
+				
+				
 				PreparedStatement ps = conn.prepareStatement(sql);
 				ps.setString(1, username);
 				ps.setString(2, password);

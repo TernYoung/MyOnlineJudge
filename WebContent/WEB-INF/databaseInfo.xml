@@ -2,12 +2,12 @@
 <!DOCTYPE xml>
 <!--保存数据库的相关信息，便于移植-->
 <xml>
-    <driverClassName value="com.mysql.jdbc.Driver">
+    <driverClassName value="com.mysql.cj.jdbc.Driver">
     </driverClassName>
-    <dbUrl value="jdbc:mysql://localhost:3306/onlineJudge?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=true">
+    <dbUrl value="jdbc:mysql://localhost:3306/myonlinejudge?useSSL=false&amp;serverTimezone=UTC">
     </dbUrl>
-    <dbUser value="oj">
+    <dbUser value="tern">
     </dbUser>
-    <dbPasswd value="onlineJudge">
+    <dbPasswd value="tern">
     </dbPasswd>
 </xml>
