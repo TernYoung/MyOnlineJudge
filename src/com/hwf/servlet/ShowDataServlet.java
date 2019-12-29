@@ -72,10 +72,14 @@ public class ShowDataServlet extends HttpServlet {
 			conn = new ConnectionDao();
 			conn.connection();
 			String sql;
-			if (isInput)
-				sql = "{call getInputData(?)}";
-			else
-				sql = "{call getOutputData(?)}";
+			if (isInput) {
+				//sql = "{call getInputData(?)}";
+				sql = "SELECT sampleInput FROM problemtestdata WHERE dataId=?;";
+			}
+			else {
+				sql = "SELECT sampleOutput FROM problemtestdata WHERE dataId=?;";
+			}
+				
 
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, id);

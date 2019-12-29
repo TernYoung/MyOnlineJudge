@@ -66,34 +66,34 @@ public class LogoutServlet extends HttpServlet {
 		response.addCookie(ckSId);
 
 		/*更新数据库*/
-		ConnectionDao conn = new ConnectionDao();
-		Statement st = null;
-		try {
-			conn.connection();
-			st = conn.createStatement();
-			String sql = "{call updateAutoLoginDatelimit(?,?,?,0)}";
-
-			String date = sdf.format(new Date());
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ps.setString(1, username);
-			ps.setString(2, SID);
-			ps.setString(3, date);
-
-			ps.executeQuery();
-		} catch (ClassNotFoundException | SQLException | ParserConfigurationException | SAXException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (st != null) {
-					st.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+//		ConnectionDao conn = new ConnectionDao();
+//		Statement st = null;
+//		try {
+////			conn.connection();
+////			st = conn.createStatement();
+////			String sql = "{call updateAutoLoginDatelimit(?,?,?,0)}";
+////
+////			String date = sdf.format(new Date());
+////			PreparedStatement ps = conn.prepareStatement(sql);
+////			ps.setString(1, username);
+////			ps.setString(2, SID);
+////			ps.setString(3, date);
+////
+////			ps.executeQuery();
+//		} catch (ClassNotFoundException | SQLException | ParserConfigurationException | SAXException e) {
+//			e.printStackTrace();
+//		} finally {
+//			try {
+//				if (st != null) {
+//					st.close();
+//				}
+//				if (conn != null) {
+//					conn.close();
+//				}
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
 
 		String PATH = "/contest.jsp";
 		response.sendRedirect(request.getContextPath() + PATH);

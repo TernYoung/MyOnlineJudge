@@ -86,7 +86,8 @@ public class SubmitCodeServlet extends HttpServlet {
 				conn = new ConnectionDao();
 				conn.connection();
 
-				String sql = "{call addSubmitStatus(?,?,?,?,?,?,?,?,?,?)}";
+				//String sql = "{call addSubmitStatus(?,?,?,?,?,?,?,?,?,?)}";
+				String sql = "INSERT INTO status (username,cid,pno,result,time,mem,length,language,code,shared) VALUES (?,?,?,?,?,?,?,?,?,?);";
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, username);
 				ps.setString(2, cid);

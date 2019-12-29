@@ -170,7 +170,7 @@
 			String randomString = seq+"";
 			session.setAttribute(CHECK_SESSION,randomString+"LL");
 		%>
-		<title>SZUCPC Online Judge</title>
+		<title>JXNU Online Judge</title>
 	</head>
 	<body>
 		<div class="container">

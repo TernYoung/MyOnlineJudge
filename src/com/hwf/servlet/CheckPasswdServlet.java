@@ -30,6 +30,7 @@ public class CheckPasswdServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
 		String cid = request.getParameter("cid");
 		String passwd = request.getParameter("passwd");
 		HttpSession session = request.getSession();
@@ -47,7 +48,8 @@ public class CheckPasswdServlet extends HttpServlet {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call isContestPasswdCorrect(?,?)}";
+			//String sql = "{call isContestPasswdCorrect(?,?)}";
+			String sql = "SELECT (SELECT Passwd FROM contest WHERE Cid=?)=?;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, cid);
 			ps.setString(2, passwd);
@@ -57,14 +59,14 @@ public class CheckPasswdServlet extends HttpServlet {
 				result = "success";
 
 				/*更新数据库*/
-				rs.close();
-				ps.close();
-
-				sql = "{call addUserLoginContest(?,?)}";
-				ps = conn.prepareStatement(sql);
-				ps.setString(1, username);
-				ps.setString(2, cid);
-				ps.executeQuery();
+//				rs.close();
+//				ps.close();
+//
+//				sql = "{call addUserLoginContest(?,?)}";
+//				ps = conn.prepareStatement(sql);
+//				ps.setString(1, username);
+//				ps.setString(2, cid);
+//				ps.executeQuery();
 			}
 		} catch (ClassNotFoundException | SQLException | ParserConfigurationException | SAXException e) {
 			e.printStackTrace();

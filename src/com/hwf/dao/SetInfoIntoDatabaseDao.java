@@ -21,13 +21,14 @@ public class SetInfoIntoDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call addProblemTestData(?,?,?)}";
+			//String sql = "{call addProblemTestData(?,?,?)}";
+			String sql = "INSERT INTO problemtestdata (pid,sampleInput,sampleOutput) VALUES (?,?,?);";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, pid);
 			ps.setString(2, inputData);
 			ps.setString(3, outputData);
 
-			ps.executeQuery();
+			ps.execute();
 		} catch (ClassNotFoundException | SQLException | ParserConfigurationException | SAXException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,12 +54,13 @@ public class SetInfoIntoDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call updateProblemInputData(?,?)}";
+			//String sql = "{call updateProblemInputData(?,?)}";
+			String sql = "UPDATE problemtestdata SET sampleInput=? WHERE dataId=?;";
 			ps = conn.prepareStatement(sql);
-			ps.setString(1, id);
-			ps.setString(2, inputData);
+			ps.setString(1, inputData);
+			ps.setString(2, id);
 
-			ps.executeQuery();
+			ps.execute();
 		} catch (ClassNotFoundException | SQLException | ParserConfigurationException | SAXException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,12 +86,13 @@ public class SetInfoIntoDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call updateProblemOutputData(?,?)}";
+			//String sql = "{call updateProblemOutputData(?,?)}";
+			String sql = "UPDATE problemtestdata SET sampleOutput=? WHERE dataId=?;";
 			ps = conn.prepareStatement(sql);
-			ps.setString(1, id);
-			ps.setString(2, outputData);
+			ps.setString(1, outputData);
+			ps.setString(2, id);
 
-			ps.executeQuery();
+			ps.execute();
 		} catch (ClassNotFoundException | SQLException | ParserConfigurationException | SAXException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -116,11 +119,12 @@ public class SetInfoIntoDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call deleteTestData(?)}";
+			//String sql = "{call deleteTestData(?)}";
+			String sql = "DELETE FROM problemtestdata WHERE dataId=?;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, id);
 
-			ps.executeQuery();
+			ps.execute();
 		} catch (ClassNotFoundException | SQLException | ParserConfigurationException | SAXException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -143,12 +147,13 @@ public class SetInfoIntoDatabaseDao {
 
 		conn = new ConnectionDao();
 		conn.connection();
-		String sql = "{call updateUserNickname(?,?)}";
+//		String sql = "{call updateUserNickname(?,?)}";
+		String sql = "UPDATE usersinfo SET NickName=? WHERE Username=?;";
 		ps = conn.prepareStatement(sql);
-		ps.setString(1, username);
-		ps.setString(2, nickname);
+		ps.setString(1, nickname);
+		ps.setString(2, username);
 
-		ps.executeQuery();
+		ps.executeUpdate();
 		ps.close();
 		conn.close();
 
@@ -160,12 +165,13 @@ public class SetInfoIntoDatabaseDao {
 
 		conn = new ConnectionDao();
 		conn.connection();
-		String sql = "{call updateUserPassword(?,?)}";
+//		String sql = "{call updateUserPassword(?,?)}";
+		String sql = "UPDATE usersinfo SET Passwd=? WHERE Username=?;";
 		ps = conn.prepareStatement(sql);
-		ps.setString(1, username);
-		ps.setString(2, password);
+		ps.setString(1, password);
+		ps.setString(2, username);
 
-		ps.executeQuery();
+		ps.executeUpdate();
 		ps.close();
 		conn.close();
 	}

@@ -36,15 +36,16 @@ public class GetInfoFromDatabaseDao {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
-		int top = (pageNow - 1) * pageNow;
+		int top = (pageNow - 1) * pageRow;
 		if (top < 0) top = 0;
 
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call showContestList(?)}";
+//			String sql = "{call showContestList(?)}";
+			String sql = "SELECT * FROM contest LIMIT ?,50;";
 			ps = conn.prepareStatement(sql);
-			ps.setLong(1, top);
+			ps.setInt(1, top);
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -87,7 +88,8 @@ public class GetInfoFromDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call getContestListNum()}";
+//			String sql = "{call getContestListNum()}";
+			String sql = "SELECT COUNT(Cid) FROM contest";
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 
@@ -120,7 +122,9 @@ public class GetInfoFromDatabaseDao {
 		return num > maxPage ? maxPage : num;
 	}
 
-	public static ArrayList<ContestListBean> searchContestListWithTitle(String search, long pageNow) {
+	public static ArrayList<ContestListBean> searchContestListWithTitle(String search, int pageNow) {
+		
+		System.out.println(search);
 		ArrayList<ContestListBean> contestList = new ArrayList<>();
 
 		ConnectionDao conn = null;
@@ -131,17 +135,19 @@ public class GetInfoFromDatabaseDao {
 			search = "";
 		search = "%" + search + "%";
 
-		long top = (pageNow - 1) * pageRow;
+		int top = (pageNow - 1) * pageRow;
 		if (top < 0)
 			top = 0;
-
+		System.out.println(top);
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call searchContestListWithTitle(?,?)}";
+//			String sql = "{call searchContestListWithTitle(?,?)}";
+			String sql = "SELECT * FROM contest WHERE Title LIKE ? LIMIT ?,50;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, search);
-			ps.setLong(2, top);
+			ps.setInt(2, top);
+
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -188,7 +194,8 @@ public class GetInfoFromDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call getSearchContestListNum(?)}";
+//			String sql = "{call getSearchContestListNum(?)}";
+			String sql = "SELECT COUNT(*) FROM contest WHERE Title LIKE ?;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, search);
 			rs = ps.executeQuery();
@@ -233,30 +240,40 @@ public class GetInfoFromDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call showContestContent(?)}";
+			//String sql = "{call showContestContent(?)}";
+			String sql = "SELECT problem.Origin,problem.Title FROM problem WHERE problem.Pid IN (SELECT Pid FROM contestcontent WHERE Cid=?);";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, cid);
 			rs = ps.executeQuery();
-
+			
+			char i = 'A';
 			while (rs.next()) {
 				ContestContentBean bean = new ContestContentBean();
 
-				bean.setPno(rs.getString(1));
-				bean.setOrigin(rs.getString(2));
-				bean.setTitle(rs.getString(3));
+				bean.setPno(Character.toString(i++));
+				bean.setOrigin(rs.getString(1));
+				bean.setTitle(rs.getString(2));
 
 				contestList.add(bean);
 			}
 
 			rs.close();
 			ps.close();
+			
+			
 
 			for (ContestContentBean bean : contestList) {
-				if (isShowContest)
-					sql = "{call showMyStatusOntime(?,?,?)}";
-				else
-					sql = "{call showMyStatus(?,?,?)}";
+				if (isShowContest) {
+					//sql = "{call showMyStatusOntime(?,?,?)}";
+					sql = "SELECT MyStatus FROM contestcontent,usersinfo WHERE contestcontent.Cid=? AND contestcontent.Pno=? AND usersinfo.Username=?;";
+				}
+					
+				else {
+					//sql = "{call showMyStatus(?,?,?)}";
+					sql = "SELECT MyStatus FROM contestcontent,usersinfo WHERE contestcontent.Cid=? AND contestcontent.Pno=? AND usersinfo.Username=?;";
 
+				}
+					
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, cid);
 				ps.setString(2, bean.getPno());
@@ -270,10 +287,15 @@ public class GetInfoFromDatabaseDao {
 				rs.close();
 				ps.close();
 
-				if (isShowContest)
-					sql = "{call showContentSubmitInfoOntime(?,?)}";
-				else
-					sql = "{call showContentSubmitInfo(?,?)}";
+				if (isShowContest) {
+					//sql = "{call showContentSubmitInfoOntime(?,?)}";
+					sql = "SELECT Accept,Submit FROM contestcontent,usersinfo WHERE contestcontent.Cid=? AND contestcontent.Pno=?;";
+				}
+				else {
+					//sql = "{call showContentSubmitInfo(?,?)}";
+					sql = "SELECT Accept,Submit FROM contestcontent,usersinfo WHERE contestcontent.Cid=? AND contestcontent.Pno=?;";
+				}
+					
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, cid);
 				ps.setString(2, bean.getPno());
@@ -319,7 +341,8 @@ public class GetInfoFromDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call getContestHint(?)}";
+			//String sql = "{call getContestHint(?)}";
+			String sql = "SELECT Hint FROM contest WHERE Cid=?;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, cid);
 			rs = ps.executeQuery();
@@ -355,7 +378,8 @@ public class GetInfoFromDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call showProblem(?,?)}";
+			//String sql = "{call showProblem(?,?)}";
+			String sql = "SELECT problem.Pid,problem.Title,TimeLimit,MemLimit,problem.Origin,Content,InputDesc,OutputDesc,SampleInput,SampleOutput,Hint FROM problem,contestcontent WHERE contestcontent.Cid=? AND contestcontent.Pno=? AND contestcontent.Pid=problem.Pid;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, cid);
 			ps.setString(2, pno);
@@ -408,7 +432,8 @@ public class GetInfoFromDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call getProblemTitleByPno(?,?)}";
+			//String sql = "{call getProblemTitleByPno(?,?)}";
+			String sql = "SELECT problem.Title FROM contestcontent,problem WHERE contestcontent.cid=? AND contestcontent.Pno=? AND contestcontent.Pid=problem.Pid;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, cid);
 			ps.setString(2, pno);
@@ -462,19 +487,27 @@ public class GetInfoFromDatabaseDao {
 			conn.connection();
 
 			if (!isCidCorrect) {
-				String sql = "{call getAllContestSubmitStatus(?,?,?,?)}";
+				//String sql = "{call getAllContestSubmitStatus(?,?,?,?)}";
+				String sql = "SELECT * FROM status WHERE username LIKE ? AND result LIKE ? AND language LIKE ? LIMIT ?,50;";
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, username);
 				ps.setString(2, result);
 				ps.setString(3, language);
 				ps.setInt(4, top);
 				rs = ps.executeQuery();
-			} else {
+			} 
+			else {
 				String sql;
-				if (isShowContest)
-					sql = "{call getSubmitStatusOntime(?,?,?,?,?,?)}";
-				else
-					sql = "{call getSubmitStatus(?,?,?,?,?,?)}";
+				if (isShowContest) {
+					//sql = "{call getSubmitStatusOntime(?,?,?,?,?,?)}";
+					sql = "SELECT * FROM status WHERE cid LIKE ? AND pno LIKE ? AND username LIKE ? AND result LIKE ? AND language LIKE ? LIMIT ?,50;";
+				}
+					
+				else {
+					//sql = "{call getSubmitStatus(?,?,?,?,?,?)}";
+					sql = "SELECT * FROM status WHERE cid LIKE ? AND pno LIKE ? AND username LIKE ? AND result LIKE ? AND language LIKE ? LIMIT ?,50;";
+				}
+					
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, cid);
 				ps.setString(2, pno);
@@ -544,19 +577,26 @@ public class GetInfoFromDatabaseDao {
 			conn.connection();
 
 			if (!isCidCorrect) {
-				String sql = "{call getAllContestSubmitStatusNum(?,?,?)}";
+				//String sql = "{call getAllContestSubmitStatusNum(?,?,?)}";
+				String sql = "SELECT COUNT(*) FROM status WHERE username LIKE ? AND result LIKE ? AND language LIKE ?;";
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, username);
 				ps.setString(2, result);
 				ps.setString(3, language);
 				rs = ps.executeQuery();
-			} else {
+			} 
+			else {
 				String sql;
 
-				if (isShowContest)
-					sql = "{call getSubmitStatusNumOntime(?,?,?,?,?)}";
-				else
-					sql = "{call getSubmitStatusNum(?,?,?,?,?)}";
+				if (isShowContest) {
+					//sql = "{call getSubmitStatusNumOntime(?,?,?,?,?)}";
+					sql = "SELECT COUNT(*) FROM status WHERE cid LIKE ? AND pno LIKE ? AND username LIKE ? AND result LIKE ? AND language LIKE ?;";
+				}
+				else {
+					//sql = "{call getSubmitStatusNum(?,?,?,?,?)}";
+					sql = "SELECT COUNT(*) FROM status WHERE cid LIKE ? AND pno LIKE ? AND username LIKE ? AND result LIKE ? AND language LIKE ?;";
+				}
+					
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, cid);
 				ps.setString(2, pno);
@@ -610,7 +650,8 @@ public class GetInfoFromDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call getTotalRankList(?)}";
+			//String sql = "{call getTotalRankList(?)}";
+			String sql = "SELECT * FROM totalrank LIMIT ?,50;";
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, top);
 			rs = ps.executeQuery();
@@ -655,7 +696,8 @@ public class GetInfoFromDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call getTotalRankListNum()}";
+			//String sql = "{call getTotalRankListNum()}";
+			String sql = "SELECT COUNT(*) FROM totalrank;";
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 
@@ -700,10 +742,15 @@ public class GetInfoFromDatabaseDao {
 			conn = new ConnectionDao();
 			conn.connection();
 			String sql;
-			if (isShowContest)
-				sql = "{call getContestRankListOntime(?)}";
-			else
-				sql = "{call getContestRankList(?)}";
+			if (isShowContest) {
+				//sql = "{call getContestRankListOntime(?)}";
+				sql = "SELECT usercontestrank.rank,usercontestrank.username,usercontestrank.nickname,usercontestrank.solve,usercontestrank.penalty FROM usercontestrank WHERE cid=?;";
+			}
+			else {
+				//sql = "{call getContestRankList(?)}";
+				sql = "SELECT usercontestrank.rank,usercontestrank.username,usercontestrank.nickname,usercontestrank.solve,usercontestrank.penalty FROM usercontestrank WHERE cid=?;";
+			}
+				
 
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, cid);
@@ -726,10 +773,16 @@ public class GetInfoFromDatabaseDao {
 				rs.close();
 				ps.close();
 
-				if (isShowContest)
-					sql = "{call getContestUserInfoOntime(?,?)}";
-				else
-					sql = "{call getContestUserInfo(?,?)}";
+				if (isShowContest) {
+					//sql = "{call getContestUserInfoOntime(?,?)}";
+					sql = "SELECT * FROM usercontestprobleminfo WHERE cid=? AND username=?;";
+				}
+					
+				else {
+					//sql = "{call getContestUserInfo(?,?)}"; 
+					sql = "SELECT * FROM usercontestprobleminfo WHERE cid=? AND username=?;";
+				}
+					
 
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, cid);
@@ -858,7 +911,8 @@ public class GetInfoFromDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call isContestPrivate(?)}";
+			//String sql = "{call isContestPrivate(?)}";
+			String sql = "SELECT Private FROM contest WHERE Cid = ?;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, cid);
 			rs = ps.executeQuery();
@@ -869,10 +923,11 @@ public class GetInfoFromDatabaseDao {
 				rs.close();
 				ps.close();
 
-				sql = "{call isUserLoginContest(?,?)}";
+				//sql = "{call isUserLoginContest(?,?)}";
+				sql = "SELECT 0 = (SELECT COUNT(username) FROM usersinfo WHERE username=?);";
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, username);
-				ps.setString(2, cid);
+				//ps.setString(2, cid);
 				rs = ps.executeQuery();
 
 				if (rs.next() && rs.getInt(1) == 1) {
@@ -908,7 +963,8 @@ public class GetInfoFromDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call getContestDate(?)}";
+			//String sql = "{call getContestDate(?)}";
+			String sql = "SELECT StartDate,EndDate FROM contest WHERE Cid=?;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, cid);
 			rs = ps.executeQuery();
@@ -957,7 +1013,8 @@ public class GetInfoFromDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call getPidAndTitle(?,?)}";
+			//String sql = "{call getPidAndTitle(?,?)}";
+			String sql = "SELECT Pid,Title FROM problem WHERE Title LIKE ? Limit ?,50;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, search);
 			ps.setInt(2, top);
@@ -1004,7 +1061,8 @@ public class GetInfoFromDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call getProblemListNum(?)}";
+			//String sql = "{call getProblemListNum(?)}";
+			String sql = "SELECT COUNT(*) FROM problem WHERE Title LIKE ?;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, search);
 			rs = ps.executeQuery();
@@ -1048,7 +1106,8 @@ public class GetInfoFromDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call getProblemByPid(?)}";
+			//String sql = "{call getProblemByPid(?)}";
+			String sql = "SELECT * FROM problem WHERE pid=?;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, pid);
 			rs = ps.executeQuery();
@@ -1099,7 +1158,8 @@ public class GetInfoFromDatabaseDao {
 			conn = new ConnectionDao();
 			conn.connection();
 
-			String sql = "{call getInputOutputDataId(?)}";
+			//String sql = "{call getInputOutputDataId(?)}";
+			String sql = "SELECT dataId FROM problemtestdata WHERE pid=?;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, pid);
 			rs = ps.executeQuery();
@@ -1137,7 +1197,8 @@ public class GetInfoFromDatabaseDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call getNickname(?)}";
+//			String sql = "{call getNickname(?)}";
+			String sql = "SELECT NickName FROM usersinfo WHERE Username=?;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, username);
 			rs = ps.executeQuery();

@@ -97,7 +97,9 @@ public class LoginServlet extends HttpServlet {
 		}
 
 		String result;
-
+		//关闭自动登录
+		autoLoginName="";autoLoginSId="";
+		
 		if (!autoLoginName.equals("") && !autoLoginSId.equals("")) {
 			// 有自动登录的cookie，执行自动登录
 			ConnectionDao conn = null;
@@ -109,6 +111,7 @@ public class LoginServlet extends HttpServlet {
 
 				/*检查“自动登录信息表”中是否有该cookie的信息存在且未过期*/
 				String sql = "Select getDateLimit(?,?);";
+				//String sql = "Select getDateLimit(?,?);";
 				PreparedStatement ps = conn.prepareStatement(sql);
 				ps.setString(1, autoLoginName);
 				ps.setString(2, autoLoginSId);
@@ -141,7 +144,7 @@ public class LoginServlet extends HttpServlet {
 						session.setAttribute(sessionIDTitle, autoLoginSId);
 
 						/*判断该账号是不是管理员*/
-						sql = "Select isAdmin(?)";
+						sql = "SELECT ?='admin';";
 						ps = conn.prepareStatement(sql);
 						ps.setString(1, autoLoginName);
 						rs = ps.executeQuery();
@@ -225,14 +228,14 @@ public class LoginServlet extends HttpServlet {
 				String ip = request.getRemoteAddr();
 				String sId = session.getId();
 
-				String sql = "Select isPasswdAccept(?,?);";
-				
+				//String sql = "Select isPasswdAccept(?,?);";
+				String sql = "SELECT (SELECT Passwd FROM usersinfo WHERE Username=?)=? FROM usersinfo;";
 				
 				PreparedStatement ps = conn.prepareStatement(sql);
 				ps.setString(1, username);
 				ps.setString(2, password);
 				ResultSet rs = ps.executeQuery();
-
+				
 				if (!rs.next() || rs.getInt(1) == 0) {
 					/*用户名或密码错误*/
 					stat.close();
@@ -241,12 +244,13 @@ public class LoginServlet extends HttpServlet {
 					result = FAIL;
 				} else {
 					/*将用户登录记录保存到登录记录表*/
-					sql = "{call addLoginHistory(?,?)}";
+//					sql = "{call addLoginHistory(?,?)}";
+					sql = "INSERT INTO loginhistory VALUES(?,?);";
 					ps = conn.prepareStatement(sql);
 					ps.setString(1, username);
 					ps.setString(2, ip);
 
-					ps.executeQuery();
+					ps.execute();
 					ps.close();
 
 					/*记住用户名/自动登录*/
@@ -274,8 +278,9 @@ public class LoginServlet extends HttpServlet {
 						calendar.add(Calendar.DATE, DATE_LIMIT);
 						date = sdf.format(calendar.getTime());
 
-						sql = "{call updateAutoLoginDatelimit(?,?,?,1)}";
-
+						//sql = "{call updateAutoLoginDatelimit(?,?,?,1)}";
+						sql	= "INSERT INTO autologin (username,Sid,date,flag) VALUES (?,?,?,1) ON DUPLICATE KEY UPDATE autologin SET Sid=?,;";
+						
 						ps = conn.prepareStatement(sql);
 						ps.setString(1, username);
 						ps.setString(2, sId);
@@ -292,7 +297,7 @@ public class LoginServlet extends HttpServlet {
 					session.setAttribute(accountTitle, username);
 					session.setAttribute(sessionIDTitle, sId);
 					/*判断当前账号是不是管理员*/
-					sql = "Select isAdmin(?)";
+					sql = "Select ?='admin'";
 					ps = conn.prepareStatement(sql);
 					ps.setString(1, username);
 					rs = ps.executeQuery();

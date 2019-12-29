@@ -88,11 +88,13 @@ function addPro(){
 		var url = addProblemForm.action;
 		try{
 			xmlHttp.open("POST",url,true);
+			
 			xmlHttp.onreadystatechange = function(){
 				if( xmlHttp.readyState==4 ){
 					if( xmlHttp.responseText=="success" ){
 						window.location.href = "./manageproblem.jsp";
 					}else{
+						
 						addProblemStatus.innerHTML = "Submit error,please try again";
 					}
 				}else{
@@ -106,6 +108,7 @@ function addPro(){
 			//"&testInput="+testInput+"&testOutput="+testOutput+
 			"&checkCode="+checkCode);
 		}catch( e ){
+			
 			addProblemStatus.innerHTML = "Submit error,please try again";
 		}
 	}

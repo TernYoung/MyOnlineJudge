@@ -64,13 +64,6 @@
 			}
 		</script>
 		<title>JXNU Online Judge</title>
-		<%
-			String isAdmin = (String)session.getAttribute("isAdmin");
-			if( isAdmin==null || !isAdmin.equals("true") ){
-				response.sendRedirect("./contest.jsp");
-				return;
-			}
-		%>
 		
 		<%
 			final String CHECK_SESSION = "checkSession";
@@ -115,11 +108,12 @@
 				<table class="table table-striped" style="margin: 0 auto; width: 95%; text-align: center;background: rgb(238, 238, 238);border: 1px solid #DDDDDD;margin-top: 10px;"> 
 					<thead>
 						<tr class="toprow" align="center">
-							<th class="center" width="20%" style="text-align: center;">Pid<br>
-								<a href="addproblem.jsp"><img height="18" src="picture/icon_add.png" border="0"></a>
-							</th>
-							<th style="text-align: center;">Title<br><input class="search custom-select" type="text" id="searchTitle" value="<%=search%>"></th>
-							<th style="text-align: center;">Test Data<br><br></th>
+							<th style="text-align: center;">题目编号<br><br></th>
+							<th style="text-align: center;">标题<br><input class="search custom-select" type="text" id="searchTitle" value="<%=search%>"></th>
+							<th style="text-align: center;">来源<br><br></th>
+							<th style="text-align: center;">正确<br><br></th>
+							<th style="text-align: center;">提交<br><br></th>
+							<th style="text-align: center;">通过率<br><br></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -129,7 +123,10 @@
 						<tr>
 							<th><%=bean.getPid()%></th>
 							<th><a href="editproblem.jsp?pid=<%=bean.getPid()%>"><%=bean.getTitle()%></a></th>
-							<th><a href="edittestdata.jsp?pid=<%=bean.getPid()%>">Edit</a></th>
+							<th><%=bean.getOrigin()%></th>
+							<th><%=bean.getOrigin()%></th>
+							<th><%=bean.getOrigin()%></th>
+							<th><%=bean.getOrigin()%></th>
 						</tr>
 						<%}%>
 					</tbody>

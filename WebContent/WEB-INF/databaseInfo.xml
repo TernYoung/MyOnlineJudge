@@ -4,10 +4,10 @@
 <xml>
     <driverClassName value="com.mysql.cj.jdbc.Driver">
     </driverClassName>
-    <dbUrl value="jdbc:mysql://localhost:3306/myonlinejudge?useSSL=false&amp;serverTimezone=UTC">
+    <dbUrl value="jdbc:mysql://localhost:3306/myonlinejudge?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true">
     </dbUrl>
-    <dbUser value="tern">
+    <dbUser value="root">
     </dbUser>
-    <dbPasswd value="tern">
+    <dbPasswd value="root">
     </dbPasswd>
 </xml>

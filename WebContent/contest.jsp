@@ -20,12 +20,24 @@
 		<script type="text/javascript">
 			<%
 				String queryString = request.getQueryString();
-				if( queryString==null ){
-					queryString = "";
-				}else if("pageNow".contains(queryString) ){
-					queryString = queryString.substring(0,queryString.indexOf("pageNow"));
+				//
+				
+				if( queryString==null || queryString==""){
+					queryString = "pageNow=1";
 				}
-				String url = request.getRequestURI()+"?"+queryString;
+				else if(queryString.contains("search") ){
+					int pos = queryString.indexOf("search");
+					queryString = "&" + queryString.substring(pos);
+				}
+				else{
+					queryString = "";
+				}
+				
+				String url1 = request.getRequestURI()+"?pageNow=";
+				String url2 = queryString;
+				
+				//;
+				
 			%>
 			
 			function lastPage(){
@@ -34,13 +46,13 @@
 				var string = _pageNow.value;
 				var pageNow = Number(string);
 				
-				if( pageNow===1 ){
+				if( pageNow==1 ){
 					var pageError = document.getElementById("pageError");
 					
 					pageError.innerText = "当前已是第一页";
 				}else{
 					pageNow--;
-					window.location.href = "<%=url%>&pageNow="+pageNow;
+					window.location.href = "<%=url1%>" + pageNow + "<%=url2%>";
 				}
 			}
 			
@@ -52,13 +64,13 @@
 				var pageNow = Number(string1);
 				var string2  = _totalPage.value;
 				var totalPage = Number(string2);
-				
+
 				if( pageNow>=totalPage ){
 					var pageError = document.getElementById("pageError");
 					pageError.innerText = "当前已是最后一页";
 				}else{
 					pageNow++;
-					window.location.href = "<%=url%>&pageNow="+pageNow;
+					window.location.href = "<%=url1%>" + pageNow + "<%=url2%>";
 				}
 			}
 		</script>
@@ -70,7 +82,7 @@
 		<script src="js/control.js"></script>
 		<script src="js/contest.js"></script>
 		
-		<title>SZUCPC Online Judge</title>
+		<title>JXNU Online Judge</title>
 		
 		<%
 			String username = (String)session.getAttribute("account");

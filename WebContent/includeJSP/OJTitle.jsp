@@ -11,6 +11,7 @@
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 				<li id="contest"><a href="./contest.jsp?pageNow=1">Contest</a></li>
+				<li id="problemlist"><a href="./problemlist.jsp?pageNow=1">ProblemList</a></li>
 				<li id="status"><a href="./status.jsp?pageNow=1">Status</a></li>
 				<li id="rankList"><a href="./ranklist.jsp?pageNow=1">Rank</a></li>
 				<li id="faqs"><a href="./faqs.jsp">FAQS</a></li>

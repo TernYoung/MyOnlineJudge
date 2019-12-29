@@ -91,7 +91,8 @@ public class CreateContestServlet extends HttpServlet {
 			conn = new ConnectionDao();
 			conn.connection();
 
-			String sql = "select addContestList(?,?,?,?,?,?,?)";
+			//String sql = "select addContestList(?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO contest (Title,StartDate,EndDate,Private,Passwd,Creator,Hint) VALUES (?,?,?,?,?,?,?);";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, title);
 			ps.setString(2, start);
@@ -100,21 +101,25 @@ public class CreateContestServlet extends HttpServlet {
 			ps.setString(5, passwd);
 			ps.setString(6, creator);
 			ps.setString(7, hint);
+			ps.execute();
+			ps.close();
+			sql="SELECT MAX(Cid) FROM contest;";
+			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
-
 			if (rs.next()) {
 				int cid = rs.getInt(1);
 				rs.close();
 				ps.close();
 
-				sql = "{call addContestContent(?,?,?)}";
+				//sql = "{call addContestContent(?,?,?)}";
+				sql = "INSERT INTO contestcontent (Cid,Pno,Pid) VALUES (?,?,?);";
 				for (int i = 0; i < pids.length; ++i) {
 					ps = conn.prepareStatement(sql);
 					ps.setInt(1, cid);
 					ps.setString(2, (char) (i + 'A') + "");
 					ps.setInt(3, pids[i]);
-
-					ps.executeQuery();
+					
+					ps.execute();
 					ps.close();
 				}
 			}

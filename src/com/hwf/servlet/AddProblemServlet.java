@@ -103,7 +103,8 @@ public class AddProblemServlet extends HttpServlet {
 			st = conn.createStatement();
 
 			// 题目信息写入数据库
-			String sql = "select addProblemContent(?,?,?,?,?,?,?,?,?,?);";
+			//String sql = "select addProblemContent(?,?,?,?,?,?,?,?,?,?);";
+			String sql = "INSERT INTO problem (Title,TimeLimit,MemLimit,Origin,Content,InputDesc,OutputDesc,SampleInput,SampleOutput,Hint) VALUES (?,?,?,?,?,?,?,?,?,?);";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, title);
 			ps.setString(2, time);
@@ -115,16 +116,20 @@ public class AddProblemServlet extends HttpServlet {
 			ps.setString(8, sampleInput);
 			ps.setString(9, sampleOutput);
 			ps.setString(10, hint);
+			ps.execute();
+			sql = "SELECT MAX(pid) FROM problem;";
+			ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				// 将sample数据写入数据库
 				int pid = rs.getInt(1);
-				sql = "{call addProblemTestData(?,?,?)}";
+				//sql = "{call addProblemTestData(?,?,?)}";
+				sql = "INSERT INTO problemtestdata (pid,sampleInput,sampleOutput) VALUES (?,?,?);";
 				ps = conn.prepareStatement(sql);
 				ps.setInt(1, pid);
 				ps.setString(2, sampleInput);
 				ps.setString(3, sampleOutput);
-				ps.executeQuery();
+				ps.execute();
 				ps.close();
 				// 将test数据写入数据库
 				// sql = "{call addProblemTestData(?,?,?)}";

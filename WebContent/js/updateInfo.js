@@ -22,7 +22,8 @@ function reset(){
 	refleshVerify();
 }
 
-function updateInfo(){
+function updateInformation(){
+	
 	var username = updateInfoForm.username.value;
 	var oldPassword = updateInfoForm.oldPassword.value;
 	var newPassword = updateInfoForm.newPassword.value;
@@ -71,7 +72,7 @@ function updateInfo(){
 		xmlHttp.open("POST",url,true);
 		xmlHttp.onreadystatechange = function(){
 			if( xmlHttp.readyState===4 ){
-				//window.alert(xmlHttp.responseText);
+//				window.alert(xmlHttp.responseText);
 				if( xmlHttp.responseText==="fail" ){
 					updateStatus.innerHTML = "Incorrect password or email";refleshVerify();
 				}else if( xmlHttp.responseText==="success" ){

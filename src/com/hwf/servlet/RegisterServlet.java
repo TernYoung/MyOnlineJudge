@@ -71,7 +71,7 @@ public class RegisterServlet extends HttpServlet {
 				String ip = request.getRemoteAddr();
 
 //				String sql = "select isUsernameExist(?)";
-				 String sql = "Select Username From " + "USERS_DATABASE_NAME" + " Where Username=?";
+				 String sql = "Select Username From " + "UsersInfo" + " Where Username=?";
 				PreparedStatement ps = conn.prepareStatement(sql);
 				ps.setString(1, username);
 				ResultSet rs = ps.executeQuery();
@@ -93,7 +93,7 @@ public class RegisterServlet extends HttpServlet {
 					if (i >= banString.length) {
 						// 将注册信息写入数据库
 //						sql = "{call addUser(?,?,?,?,0,?)}";
-						 sql = "Insert Into " + "USERS_DATABASE_NAME" + " (Username,Passwd,NickName,Email,Date,IP) Values(?,MD5(?),?,?,0,?)";
+						 sql = "Insert Into " + "UsersInfo" + " (Username,Passwd,NickName,Email,Date,IP) Values(?,?,?,?,0,?)";
 						ps = conn.prepareStatement(sql);
 						ps.setString(1, username);
 						ps.setString(2, password);

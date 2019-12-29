@@ -33,19 +33,22 @@
 		<div class="container">
 			<jsp:include page="includeJSP/OJTitle.jsp"></jsp:include>
 			
-			<div class="outer"> 
+			<div class="outer">
 			<form action="<%=request.getContextPath()%>/login" method="POST" name="loginForm">
 				<div class="outer2">
+					<!-- 用户名 -->
 					<div class="inner">
 						<img class="icon" src="picture/loginpage/icon_user.png">
 						<input class="text1 custom-select" name="username" id="usernameId" type="text" placeholder="Please enter your username" onclick="setEmpty();" 
 							value="" >
 					</div><br>
+					<!-- 密码 -->
 					<div class="inner">
 						<img class="icon" src="picture/loginpage/icon_passwd.png">
 						<input class="text1 custom-select" name="password" id="passwordId" type="password" placeholder="Please enter your password" onclick="setEmpty();"
 							 value="" >
 					</div><br>
+					
 					<br>
 					<div id="mpanel" style="margin-left: 20%;"></div>
 					<input type="hidden" id="verifyStatus" value="0"><br>

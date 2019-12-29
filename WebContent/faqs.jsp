@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/content.css">
     <script src="./js/control.js"></script>
-    <title>SZU Online Judge</title>
+    <title>JXNU Online Judge</title>
 </head>
 <body onload="setAlive();">
 <div class="container">
@@ -15,33 +15,34 @@
     <div class="outer">
         <div class="jumbotron" style="background-color: white; text-align: left;">
             <center>
-                <font size="+3">SZU Online Judge FAQS</font>
+                <font size="+3">JXNU Online Judge FAQS</font>
             </center>
             <hr>
             <p><font color="green">Q</font>:这个在线裁判系统使用什么样的编译器和编译选项?<br>
                 <font color="red">A</font>:系统运行于Ubuntu系统，使用GNU GCC/G++作为C/C++编译器，用java-8-oracle编译 JAVA。对应的编译选项如下:<br>
             </p>
             <p>
-            <table data-anchor-id="4e1e" class="table table-striped-white table-bordered">
-                <thead>
-                <tr>
-                    <th>编程语言</th>
-                    <th>编译指令</th>
-                </tr>
-                </thead>
-                <tbody style="text-align: center;"><tr>
-                    <td>C</td>
-                    <td>gcc -Wall -lm Main.c -o Main</td>
-                </tr>
-                <tr>
-                    <td>C++</td>
-                    <td>g++ -Wall -fno-asm -lm -std=c++11 Main.cpp -o Main</td>
-                </tr>
-                <tr>
-                    <td>JAVA</td>
-                    <td>javac -J-Xms32m -J-Xmx64m -encoding UTF-8 Main.java</td>
-                </tr>
-                </tbody></table>
+	            <table data-anchor-id="4e1e" class="table table-striped-white table-bordered">
+	                <thead>
+	                <tr>
+	                    <th>编程语言</th>
+	                    <th>编译指令</th>
+	                </tr>
+	                </thead>
+	                <tbody style="text-align: center;"><tr>
+	                    <td>C</td>
+	                    <td>gcc -Wall -lm Main.c -o Main</td>
+	                </tr>
+	                <tr>
+	                    <td>C++</td>
+	                    <td>g++ -Wall -fno-asm -lm -std=c++11 Main.cpp -o Main</td>
+	                </tr>
+	                <tr>
+	                    <td>JAVA</td>
+	                    <td>javac -J-Xms32m -J-Xmx64m -encoding UTF-8 Main.java</td>
+	                </tr>
+	                </tbody>
+	          	</table>
             </p>
 
             <p>  编译器版本为（系统可能升级编译器版本，这里仅供参考）:<br>
@@ -122,7 +123,7 @@ public class Main{
             <br>
             <hr>
             <div style="float: right;">
-                <a href="./contest.jsp"><font color="red">SZUCPC Online Judge</font></a>
+                <a href="./contest.jsp"><font color="red">JXNU Online Judge</font></a>
                 <font color="red">2017.12.07</font>
             </div>
         </div>

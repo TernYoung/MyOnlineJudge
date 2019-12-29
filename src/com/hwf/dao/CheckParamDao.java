@@ -25,7 +25,8 @@ public class CheckParamDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call isCidCorrect(?)}";
+			//String sql = "SELECT isCidCorrect(?)";
+			String sql = "SELECT ?>0;";
 
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, Integer.parseInt(cid));
@@ -105,11 +106,10 @@ public class CheckParamDao {
 		try {
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call checkUserInfo(?,?,?)}";
+			String sql = "SELECT (SELECT Passwd FROM usersinfo WHERE Username=?)=? FROM usersinfo;";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, username);
 			ps.setString(2, passwd);
-			ps.setString(3, email);
 
 			System.out.println(username + "---" + passwd + "---" + email);
 

@@ -85,19 +85,19 @@ public class UpdateInfoServlet extends HttpServlet {
 					session.removeAttribute("sessionID");
 
 					/*更新数据库*/
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-					conn = new ConnectionDao();
-					conn.connection();
-					String sql = "{call updateAutoLoginDatelimit(?,?,?,0)}";
-
-					String date = sdf.format(new Date());
-					ps = conn.prepareStatement(sql);
-					ps.setString(1, username);
-					ps.setString(2, SID);
-					ps.setString(3, date);
-
-					ps.executeQuery();
+//					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//
+//					conn = new ConnectionDao();
+//					conn.connection();
+//					String sql = "{call updateAutoLoginDatelimit(?,?,?,0)}";
+//
+//					String date = sdf.format(new Date());
+//					ps = conn.prepareStatement(sql);
+//					ps.setString(1, username);
+//					ps.setString(2, SID);
+//					ps.setString(3, date);
+//
+//					ps.executeQuery();
 				}
 				result = "success";
 			} catch (ClassNotFoundException | SQLException | ParserConfigurationException | SAXException e) {

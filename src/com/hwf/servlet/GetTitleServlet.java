@@ -64,7 +64,8 @@ public class GetTitleServlet extends HttpServlet {
 			int pid = Integer.parseInt(request.getParameter("pid"));
 			conn = new ConnectionDao();
 			conn.connection();
-			String sql = "{call getProblemTitleByPid(?)}";
+			//String sql = "{call getProblemTitleByPid(?)}";
+			String sql = "SELECT Title FROM problem WHERE Pid=?;";
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, pid);
 			rs = ps.executeQuery();

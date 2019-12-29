@@ -86,7 +86,7 @@
 						<input id="resetButton" type="button" class="button" style="float: left;" value="Reset" 
 							onclick="reset();setEmpty();">
 						<input id="updateInfo" type="button" class="button" style="float: right;" value="Update"
-							onclick="updateInfo();">
+							onclick="updateInformation();">
 					</div>
 				</div>
 			</form>

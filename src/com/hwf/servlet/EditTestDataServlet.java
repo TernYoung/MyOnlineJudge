@@ -1,6 +1,7 @@
 package com.hwf.servlet;
 
 import com.hwf.dao.SetInfoIntoDatabaseDao;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -72,8 +73,8 @@ public class EditTestDataServlet extends HttpServlet {
 				case "add": type = 3; break;
 				default: response.sendRedirect(request.getContextPath() + PATH); return;
 			}
-
-			String savePath = "/onlineJudge/";
+			  
+			String savePath = "/home/cputern/eclipse-workspace/MyOnlineJudge/testData/";
 			File f1 = new File(savePath);
 			if (!f1.exists()) {
 				f1.mkdirs();
@@ -85,7 +86,7 @@ public class EditTestDataServlet extends HttpServlet {
 			List<FileItem> fileList;
 			try {
 				fileList = upload.parseRequest(request);
-
+				
 				String data[] = new String[2];
 
 				int size = fileList.size();
